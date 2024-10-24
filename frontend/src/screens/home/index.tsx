@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { ColorSwatch, Group } from '@mantine/core';
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import axios from 'axios';
-import {SWATCHES} from '@/constants';
+import { SWATCHES } from '@/constants';
 
-interface Response{
+interface Response {
     expr: string;
     result: string;
     assign: boolean;
 }
-interface GeneratedResult{
+interface GeneratedResult {
     expression: string;
     answer: string;
 }
@@ -22,6 +22,7 @@ export default function Home() {
     const [dictOfVars, setDictOfVars] = useState({});
     const [result, setResult] = useState<GeneratedResult>();
 
+    // Reset canvas when 'reset' is triggered
     useEffect(() => {
         if (reset) {
             resetCanvas();
@@ -45,14 +46,16 @@ export default function Home() {
         }
     }, []);
 
-    const sendData = async() => {
+    // send canvas data and variables to backend for calculation
+    const sendData = async () => {
         const canvas = canvasRef.current;
 
-        if(canvas){
+        if (canvas) {
+            // Send image data and variable dictionary to API
             const response = await axios({
                 method: 'post',
                 url: `${import.meta.env.VITE_API_URL}/calculate`,
-                data:{
+                data: {
                     image: canvas.toDataURL('image/png'),
                     dict_of_vars: dictOfVars
                 }
@@ -63,11 +66,12 @@ export default function Home() {
         }
     };
 
+    // reset the canvas
     const resetCanvas = () => {
         const canvas = canvasRef.current;
-        if(canvas) {
+        if (canvas) {
             const ctx = canvas.getContext('2d');
-            if(ctx){
+            if (ctx) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
         }
@@ -97,6 +101,7 @@ export default function Home() {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
+                // Set the stroke color and draw the line based on mouse movement
                 ctx.strokeStyle = color;
                 ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
                 ctx.stroke();
@@ -106,11 +111,11 @@ export default function Home() {
 
     return (
         <>
-             <div className='grid grid-cols-3 gap-2'>
+            <div className='grid grid-cols-3 gap-2'>
                 <Button
                     onClick={() => setReset(true)}
                     className='z-20 bg-black text-white'
-                    variant='default' 
+                    variant='default'
                     color='black'
                 >
                     Reset
@@ -118,7 +123,7 @@ export default function Home() {
                 <Group className='z-20'>
                     {SWATCHES.map((swatch: string) => (
                         <ColorSwatch key={swatch} color={swatch} onClick={() => setColor(swatch)}
-                        style={{ cursor: 'pointer' }} />
+                            style={{ cursor: 'pointer' }} />
                     ))}
                 </Group>
                 <Button
