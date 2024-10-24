@@ -117,7 +117,8 @@ export default function Home() {
                 </Button>
                 <Group className='z-20'>
                     {SWATCHES.map((swatch: string) => (
-                        <ColorSwatch key={swatch} color={swatch} onClick={() => setColor(swatch)} />
+                        <ColorSwatch key={swatch} color={swatch} onClick={() => setColor(swatch)}
+                        style={{ cursor: 'pointer' }} />
                     ))}
                 </Group>
                 <Button
