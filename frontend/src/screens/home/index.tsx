@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { ColorSwatch } from '@mantine/core';
+import { ColorSwatch, Group } from '@mantine/core';
 import {Button} from '@/components/ui/button';
 import axios from 'axios';
-import { Group } from 'lucide-react';
 import {SWATCHES} from '@/constants';
 
 interface Response{
@@ -18,10 +17,10 @@ interface GeneratedResult{
 export default function Home() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [color, setColor] = useState('rgb(255, 255, 255)');
-    const [reset, setRest] = useState(false);
-    const [result, setResult] = useState<GeneratedResult>();
+    const [color, setColor] = useState('#FFFFFF');
+    const [reset, setReset] = useState(false);
     const [dictOfVars, setDictOfVars] = useState({});
+    const [result, setResult] = useState<GeneratedResult>();
 
     useEffect(() => {
         if (reset) {
@@ -40,6 +39,8 @@ export default function Home() {
                 canvas.height = window.innerHeight - canvas.offsetTop;
                 ctx.lineCap = 'round';         //for brush type
                 ctx.lineWidth = 3;             //for brush size
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
         }
     }, []);
@@ -115,11 +116,8 @@ export default function Home() {
                     Reset
                 </Button>
                 <Group className='z-20'>
-                    {SWATCHES.map((swatchColor) => (
-                        <ColorSwatch key={swatchColor} 
-                        color={swatchColor} 
-                        onClick={() => setColor(swatchColor)}
-                        />
+                    {SWATCHES.map((swatch: string) => (
+                        <ColorSwatch key={swatch} color={swatch} onClick={() => setColor(swatch)} />
                     ))}
                 </Group>
                 <Button
