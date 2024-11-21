@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/mathjax": "^0.0.40",
+    "mathjax": "^3.2.2",
+    "react-draggable": "^4.4.6"
+  }
+}
